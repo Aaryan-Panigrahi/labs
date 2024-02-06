@@ -29,13 +29,14 @@ graph *create_graph(int n){
 }
 
 void add_edge(graph *graph, int src, int dest){
+
     node *new_node = create_node(dest);
     new_node->next = graph->adj_list[src];
     graph->adj_list[src] = new_node;
 
-    new_node = create_node(src);
-    new_node->next = graph->adj_list[dest];
-    graph->adj_list[dest] = new_node;
+    // new_node = create_node(src);
+    // new_node->next = graph->adj_list[dest];
+    // graph->adj_list[dest] = new_node;
 }
 
 //added this function
