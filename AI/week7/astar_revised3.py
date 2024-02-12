@@ -4,18 +4,19 @@ import pq
 
 def a_star(g, start, h):
 	open = pq.PriorityQueue()
-	open.push(start, [start], 0)
+	open.push(start, [start], 0+h[start])
 	explored = []
 
 	while not open.is_empty():
-		curr, path, cost = open.pop()
+		curr, path, f_cost_curr = open.pop()
 		explored.append(curr)
 
         #Check if you want
 
 		if h[curr]==0:
-			print("Found BEST (another) path - ", path)
-			print("With a cost = ", cost)
+			print("\nFound BEST path - ", path)
+			print("\nWith a cost = ", f_cost_curr)
+			return
 			
 		print("\nCurrently at -", curr)
 		
@@ -23,10 +24,9 @@ def a_star(g, start, h):
 			n_path = path.copy()
 			n_path.append(neighbour)
 
-			g_cost = cost + e_cost
-			f_cost = g_cost + h[neighbour]
-			print("Neighbour - ", neighbour)
-			print("G = ", g_cost, ", F = ", f_cost)
+			g_cost_neighbour = (f_cost_curr - h[curr]) + e_cost
+			f_cost_neighbour = g_cost_neighbour + h[neighbour]
+			print("\t--> ", neighbour, "\t= G = ", g_cost_neighbour, "\t F = ", f_cost_neighbour)
 
 
 			if neighbour not in explored:
@@ -34,13 +34,13 @@ def a_star(g, start, h):
 				for i in range(len(open.queue)):
 					
 					if(open.queue[i][0] == neighbour): # Already exists, so compare gcosts (coz h is same anyway)
-						previous_g = open.queue[i][2]
-						if(g_cost < previous_g):
+						previous_f = open.queue[i][2]
+						if(f_cost_neighbour < previous_f):
 							s = 1
-							open.queue[i] = (neighbour, n_path, g_cost)
+							open.queue[i] = (neighbour, n_path, f_cost_neighbour)
 							break
 				if(s==0):
-					open.push(neighbour, n_path, g_cost)
+					open.push(neighbour, n_path, f_cost_neighbour)
 							
 						
 				

@@ -1,1 +1,1 @@
-f_cost
+explored

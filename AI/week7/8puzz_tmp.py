@@ -16,29 +16,18 @@ initial_state = [
 #Possible moves would be to swap 0 with neighbours
 adjs = {'R':[1, 0], 'L':[-1, 0], 'U':[0, 1], 'D':[0, -1]}
 
-def print_state(state):
-	for row in state:
-		print(row)
-	print("\n")
-
 def nexts(state):
 	nexts = {} #set of {move: state}s
 	x0, y0 = get_xy(0, state)
-	print("0 - ", x0, y0)
 
 	for m, adj in adjs.items():
 		xn = x0 + adj[0]
 		yn = y0 + adj[1]
 
-
 		if xn not in range(3) or yn not in range(3):
-			print("n - ", xn, yn, " - out of range")
 			continue
-		
+
 		nexts[m] = swap0(state, xn, yn)
-		print("n - ", xn, yn, " was swapped")
-		print(next[m])
-		# print_state(next[m])
 
 	return nexts
 
@@ -68,10 +57,7 @@ def h(state, goal_state):
 # A-STAR -
 
 
-def a_star_rev3(start, target):
-	'''
-	open - pq (state, path, f_cost)
-	'''
+def a_star_rev3(g, start, target):
 	open = pq.PriorityQueue()
 	open.push(start, [], 0+h(start, target))
 	explored = []
@@ -82,56 +68,63 @@ def a_star_rev3(start, target):
 
         #Check if you want
 
-		if h(curr, target)==0:
+		if h[curr]==0:
 			print("\nFound BEST path - ", path)
 			print("\nWith a cost = ", f_cost_curr)
-			return path
+			return
 			
 		print("\nCurrently at -", curr)
+		
+		for neighbour, e_cost in g.adj_list[curr]:
+			n_path = path.copy()
+			n_path.append(neighbour)
+
+			g_cost_neighbour = (f_cost_curr - h[curr]) + e_cost
+			f_cost_neighbour = g_cost_neighbour + h[neighbour]
+			print("\t--> ", neighbour, "\t= G = ", g_cost_neighbour, "\t F = ", f_cost_neighbour)
+
+
+			if neighbour not in explored:
+				s = 0
+				for i in range(len(open.queue)):
+					
+					if(open.queue[i][0] == neighbour): # Already exists, so compare gcosts (coz h is same anyway)
+						previous_f = open.queue[i][2]
+						if(f_cost_neighbour < previous_f):
+							s = 1
+							open.queue[i] = (neighbour, n_path, f_cost_neighbour)
+							break
+				if(s==0):
+					open.push(neighbour, n_path, f_cost_neighbour)
+
+def a_star(g, start, goal):
+	open = pq.PriorityQueue()
+	open.push(start, [], 0+h(start, goal))
+	explored = []
+
+	while not open.is_empty():
+		curr, path, cost = open.pop()
+		explored.append(curr)
+
+        #Check if you want
+
+		if h[curr]==0:
+			print("Found BEST (another) path - ", path)
+			print("With a cost = ", cost)
+			return path
+			
+
 		for m, next in nexts(curr).items():
 			n_path = path.copy()
 			n_path.append(m)
 
-			g_cost_neighbour = (f_cost_curr - h(curr, target)) + 1
-			f_cost_neighbour = g_cost_neighbour + h(next, target)
-			print("--> ", next, "\t= G = ", g_cost_neighbour, "  F = ", f_cost_neighbour)
+			g_cost = cost + 1
+			f_cost = g_cost + h(next, goal)
 
-			print("Explored so far: ", explored)	
 			if next not in explored:
-				print(next, "not in explored")
-				s = 0
+				open.push(next, n_path, g_cost)
+			else:
 				for i in range(len(open.queue)):
-					print(open.queue[i][0])
-					if(open.queue[i][0] == next): # Already exists, so compare gcosts (coz h is same anyway)
-						previous_f = open.queue[i][2]
-						if(f_cost_neighbour < previous_f):
-							s = 1
-							open.queue[i] = (next, n_path, f_cost_neighbour)
-							break
-				if(s==0):
-					print("Pushing ", next)
-					open.push(next, n_path, f_cost_neighbour)
-
-goal_state = [
-			[1, 2, 3], 
-			[4, 5, 6], 
-			[7, 8, 0]]
-
-initial_state = [
-				[8, 5, 4], 
-				[3, 1, 2], 
-				[7, 6, 0]]
-
-# print_state(initial_state)
-# print(get_xy(0, initial_state))
-# n = swap0(initial_state, 2, 1)
-# print_state(n)
-
-ns = nexts(initial_state)
-
-# for m, next in ns.items():
-# 	print(m, ": ")
-# 	print_state(next)
-
-# a_star_rev3(initial_state, goal_state)
+					if(open.queue[i][0] == next and open.queue[i][2] > g_cost):
+						open.queue[i] = (next, n_path, g_cost)
 

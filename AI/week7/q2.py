@@ -1,5 +1,5 @@
 import graphs as gr
-import astar_revised2 as astar
+import astar_revised3 as astar
 
 g = gr.Graph(10)
 g.define_vs(['S', 'A', 'B', 'C', 'D', 'E', 'F', 'G1', 'G2', 'G3'])
