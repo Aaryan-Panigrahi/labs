@@ -1,14 +1,10 @@
 #include "tree.h"
 
 int count_nodes(Tnode* root) {
-    if (root == NULL) {
-        return 0;
-    } else {
-        // Count nodes in the left subtree
+    if (root == NULL) return 0;
+    else {
         int left_count = count_nodes(root->lch);
-        // Count nodes in the right subtree
         int right_count = count_nodes(root->rch);
-        // Add 1 for the current root node
         return left_count + right_count + 1;
     }
 }
