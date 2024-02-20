@@ -84,6 +84,54 @@ Tnode* insert_avl(Tnode* root, int key){
     // 3. As soon as you find a bf ==2 remember it as a z
     //      The next two on your way are going to be y an x.
     //      Also keep track of your movement from z to x = {LL, RR, L}
+    // 4. Perform the rotation
+    // 5. Return the new root
 
+    Tnode* z = root;
+    Tnode* y = NULL;
+    Tnode* x = NULL;
+
+    // Find z, y, x
+    Tnode* temp = root;
+    while (temp != NULL) {
+        if (temp->bf < -1 || temp->bf > 1) {
+            z = temp;
+            if (key < z->key) {
+                y = z->lch;
+            } else {
+                y = z->rch;
+            }
+            break;
+        }
+        if (key < temp->key) {
+            temp = temp->lch;
+        } else {
+            temp = temp->rch;
+        }
+    }
+
+    if (z != NULL) {
+        // Determine x based on y
+        if (y != NULL) {
+            if (key < y->key) {
+                x = y->lch;
+            } else {
+                x = y->rch;
+            }
+        }
+
+        //perform rotations
+        if (z->bf > 1 && y->bf >= 0) {
+            return right(z); // LL Case
+        } else if (z->bf < -1 && y->bf <= 0) {
+            return left(z); // RR Case
+        } else if (z->bf > 1 && y->bf < 0) {
+            return left_right(z); // LR Case
+        } else if (z->bf < -1 && y->bf > 0) {
+            return right_left(z); // RL Case
+        }
+    }
+    
+    return root;
+    
 }
-
