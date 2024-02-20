@@ -120,10 +120,10 @@ int test2(int ** costs, int n){
     for(int i=0; i<tot; i++){
         int cost = 0;
 
-        // printf("Trying - ");
-        // for(int k=0; k<n; k++) printf("%d ", moth[i][k]);
+        printf("Trying - ");
+        for(int k=0; k<n; k++) printf("%d ", moth[i][k]);
 
-        // printf("\n");
+        printf("\n");
         for(int j=0; j<n; j++){
             opc++;
             cost += costs[j][moth[i][j] - 1];

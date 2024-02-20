@@ -44,13 +44,13 @@ void analyze() {
 int main() {
     analyze();
 
-    printf("\nUSER INPUT TREE \n");
-    printf("Enter the key for the root:");
-    int k;
-    scanf("%d", &k);
-    Tnode* root = get_node(k);
+    // printf("\nUSER INPUT TREE \n");
+    // printf("Enter the key for the root:");
+    // int k;
+    // scanf("%d", &k);
+    Tnode* root = get_node(1);
     
-    // root = make_tree(root);
+    // // root = make_tree(root);
 
     //sample tree
     root->lch = get_node(2);
