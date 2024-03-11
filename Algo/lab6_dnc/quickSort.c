@@ -51,7 +51,8 @@ void analyze() {
     for(int i=0; i<10; i++) array_sizes[i] = i*500;
 
     for (int i = 0; i < 10; i++) {
-        int arr[array_sizes[i]];
+        const int c = array_sizes[i];
+        int *arr = (int*) malloc(c*sizeof(int));
         generate_random_array(arr, array_sizes[i]); 
         quick_sort(arr, 0, array_sizes[i] - 1); 
 
@@ -75,7 +76,7 @@ int main() {
     //usr input
     printf("Enter n - ");
     scanf("%d", &n);
-    int arr[n];
+    int *arr = (int*)malloc(n*sizeof(int));
     printf("Enter the elements - \n");
     for (int i = 0; i < n; i++)
         scanf("%d", &arr[i]);
